@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Elif’e Özel ❤️</title>
+<style>
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(120deg,#ff9a9e,#fad0c4);
+color:#fff;
+text-align:center;
+}
+
+/* LOCK SCREEN */
+#lockScreen{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
+
+#pin{
+font-size:2em;
+letter-spacing:10px;
+margin:20px;
+}
+
+.keypad{
+display:grid;
+grid-template-columns:repeat(3,80px);
+gap:15px;
+}
+
+.keypad button{
+width:80px;
+height:80px;
+font-size:1.5em;
+border:none;
+border-radius:50%;
+background:#ff4d6d;
+color:#fff;
+}
+
+#error{margin-top:15px}
+
+/* HEARTS */
+#hearts{
+position:fixed;
+inset:0;
+pointer-events:none;
+}
+
+.heart{
+position:absolute;
+font-size:30px;
+animation:float 2s ease-out forwards;
+}
+
+@keyframes float{
+from{transform:translateY(0) scale(0);opacity:1}
+to{transform:translateY(-200px) scale(1.5);opacity:0}
+}
+
+/* CONTENT */
+#content{display:none}
+
+#loveText{
+font-size:3em;
+margin-top:60px;
+animation:fadeIn 2s ease forwards;
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:scale(0.5)}
+to{opacity:1;transform:scale(1)}
+}
+
+.message-box{
+background:rgba(255,255,255,0.2);
+padding:25px;
+border-radius:20px;
+max-width:650px;
+margin:30px auto;
+font-size:1.2em;
+line-height:1.6;
+}
+
+.gallery{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+margin:40px 0;
+}
+
+.gallery img{
+width:220px;
+height:300px;
+object-fit:cover;
+border-radius:15px;
+margin:10px;
+}
+
+button.music{
+padding:12px 25px;
+border:none;
+border-radius:25px;
+background:#ff4d6d;
+color:#fff;
+}
+</style>
+</head>
+<body>
+
+<!-- LOCK -->
+<div id="lockScreen">
+<h2>🔒 Elif’e özel bir site</h2>
+<div id="pin">____</div>
+
+<div class="keypad">
+<button onclick="press(1)">1</button><button onclick="press(2)">2</button><button onclick="press(3)">3</button>
+<button onclick="press(4)">4</button><button onclick="press(5)">5</button><button onclick="press(6)">6</button>
+<button onclick="press(7)">7</button><button onclick="press(8)">8</button><button onclick="press(9)">9</button>
+<button onclick="clearPin()">⌫</button><button onclick="press(0)">0</button><button onclick="check()">✔</button>
+</div>
+<p id="error"></p>
+</div>
+
+<div id="hearts"></div>
+
+<!-- SITE -->
+<div id="content">
+
+<div id="loveText">❤️ Seni Çok Seviyorum Elif ❤️</div>
+
+<div class="message-box">
+<p>
+Elif,
+hayatıma girdiğin günden beri her şey daha anlamlı.
+Gülüşün içimi ısıtıyor, sesin bana huzur veriyor.
+</p>
+
+<p>
+Sen yanımdayken zaman daha güzel akıyor.
+Her anı seninle paylaşmak istiyorum.
+</p>
+
+<p>
+Bu siteyi sana yaptım çünkü sen benim en değerli
+duygumsun, en güzel hikayemsin 💖
+</p>
+</div>
+
+<button class="music" onclick="playMusic()">🎵 Müziği Başlat</button>
+
+<audio id="music" loop>
+<source src="music.mp3">
+</audio>
+
+<div class="gallery">
+<img src="foto1.jpg">
+<img src="foto2.jpg">
+<img src="foto3.jpg">
+</div>
+
+</div>
+
+<script>
+let pin="", tries=0;
+const correct="0606";
+
+function vibrate(ms){ if(navigator.vibrate) navigator.vibrate(ms); }
+
+function press(n){
+if(pin.length>=4) return;
+pin+=n;
+document.getElementById("pin").innerText=pin.padEnd(4,"_");
+vibrate(50);
+}
+
+function clearPin(){
+pin="";
+document.getElementById("pin").innerText="____";
+}
+
+function check(){
+if(pin===correct){
+vibrate([100,50,100]);
+hearts();
+setTimeout(()=>{
+document.getElementById("lockScreen").style.display="none";
+document.getElementById("content").style.display="block";
+},1200);
+}else{
+tries++;
+pin="";
+document.getElementById("pin").innerText="____";
+document.getElementById("error").innerText="Şifre yanlış 💔";
+vibrate(300);
+if(tries>=3){
+document.getElementById("error").innerText="🔒 Kilitlendi";
+document.querySelectorAll("button").forEach(b=>b.disabled=true);
+}
+}
+}
+
+function hearts(){
+for(let i=0;i<25;i++){
+const h=document.createElement("div");
+h.className="heart";
+h.innerText="❤️";
+h.style.left=Math.random()*100+"%";
+h.style.bottom="0";
+document.getElementById("hearts").appendChild(h);
+setTimeout(()=>h.remove(),2000);
+}
+}
+
+function playMusic(){
+document.getElementById("music").play();
+}
+</script>
+
+</body>
+</html>
